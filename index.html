@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אחות מרכזת פיתוח מקצועי - אתר תדמית</title>
+    
+    <!-- ספריות עיצוב ואייקונים -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- גוגל פונטס - פונט Rubik לעברית מודרנית -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #06b6d4;
+            --dark-bg: #0f172a;
+            --panel-bg: rgba(30, 41, 59, 0.7);
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--dark-bg);
+            color: #f8fafc;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* עיצוב רקע דינמי */
+        .bg-shapes {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite alternate;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 150px) scale(1.2); }
+        }
+
+        /* אפקטים לכרטיסיות ופאנלים */
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s ease;
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6);
+            transform: translateY(-5px);
+        }
+
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to left, #60a5fa, #22d3ee);
+        }
+
+        /* אנימציות הופעה בגלילה */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* כפתורי צף מותאמים */
+        .btn-glow {
+            position: relative;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4, #8b5cf6);
+            z-index: -1;
+            border-radius: inherit;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .btn-glow:hover::before { opacity: 0.6; }
+        
+        /* התאמת גלילה לניווט דביק */
+        section { scroll-margin-top: 80px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="bg-shapes">
+        <div class="shape bg-blue-600 w-96 h-96 top-0 right-0"></div>
+        <div class="shape bg-teal-500 w-80 h-80 bottom-20 left-10" style="animation-delay: -5s;"></div>
+        <div class="shape bg-purple-600 w-72 h-72 top-1/3 left-1/3" style="animation-delay: -10s;"></div>
+    </div>
+
+    <nav class="fixed w-full z-50 glass-panel border-x-0 border-t-0 rounded-none bg-slate-900/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- לוגו -->
+                <div class="flex items-center gap-3">
+                    <img src="https://placehold.co/100x100/1e293b/3b82f6?text=Logo+2" alt="לוגו אחות מרכזת פיתוח" class="w-12 h-12 object-cover rounded-xl shadow-lg shadow-blue-500/20 border border-white/10">
+                    <span class="font-bold text-xl md:text-2xl tracking-wide">פיתוח מקצועי <span class="text-blue-400 font-light">בסיעוד</span></span>
+                </div>
+
+                <!-- תפריט דסקטופ -->
+                <div class="hidden md:flex space-x-8 space-x-reverse items-center">
+                    <a href="#home" class="text-gray-300 hover:text-white hover:text-blue-400 transition-colors font-medium">ראשי</a>
+                    <a href="#about" class="text-gray-300 hover:text-white hover:text-blue-400 transition-colors font-medium">הפרופיל שלי</a>
+                    <a href="#learning" class="text-gray-300 hover:text-white hover:text-blue-400 transition-colors font-medium">תוצרי למידה</a>
+                    <a href="#questionnaires" class="text-gray-300 hover:text-white hover:text-blue-400 transition-colors font-medium">הערכה ובקרה</a>
+                    <a href="#simulations" class="text-gray-300 hover:text-white hover:text-blue-400 transition-colors font-medium">סימולציות</a>
+                    <a href="#projects" class="text-gray-300 hover:text-white hover:text-blue-400 transition-colors font-medium">פיתוחים</a>
+                    <a href="#contact" class="px-5 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 font-medium hover:bg-blue-500 hover:text-white transition-all btn-glow">צור קשר</a>
+                </div>
+
+                <!-- כפתור מובייל -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- תפריט מובייל נפתח -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-white/10 absolute w-full left-0 top-20 bg-slate-900/95">
+            <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col text-center shadow-2xl">
+                <a href="#home" class="block text-gray-300 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg font-medium">ראשי</a>
+                <a href="#about" class="block text-gray-300 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg font-medium">הפרופיל שלי</a>
+                <a href="#learning" class="block text-gray-300 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg font-medium">תוצרי למידה</a>
+                <a href="#questionnaires" class="block text-gray-300 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg font-medium">הערכה ובקרה</a>
+                <a href="#simulations" class="block text-gray-300 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg font-medium">סימולציות ותרגילים</a>
+                <a href="#projects" class="block text-gray-300 hover:text-white hover:bg-white/5 px-3 py-3 rounded-lg font-medium">פיתוחים שונים</a>
+                <a href="#contact" class="block text-blue-400 font-bold hover:bg-white/5 px-3 py-3 rounded-lg mt-4 border border-blue-500/30">צור קשר</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- טקסט ומידע -->
+                <div class="text-right reveal">
+                    <div class="inline-block px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-300 font-medium text-sm mb-6 flex items-center gap-2 w-max">
+                        <i class="fas fa-stethoscope"></i> אחות מרכזת פיתוח מקצועי
+                    </div>
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-white">
+                        קידום <span class="text-gradient">מצוינות קלינית</span><br>
+                        באמצעות הדרכה.
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl leading-relaxed">
+                        מובילה תהליכי למידה, מפתחת תוכניות הכשרה ומשלבת כלים חדשניים לשיפור איכות הטיפול, בטיחות המטופל והעצמת הצוות הסיעודי במחלקה.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#about" class="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-teal-500 text-white font-bold hover:shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1 btn-glow flex items-center gap-2">
+                            הכירו אותי <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <a href="#projects" class="px-8 py-4 rounded-xl glass-panel text-white font-medium hover:bg-white/10 transition-all flex items-center gap-2 border border-white/10">
+                            צפייה בתוצרים <i class="fas fa-folder-open text-blue-400"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- אלמנט גרפי משלים מרחף -->
+                <div class="hidden lg:flex justify-center items-center relative reveal delay-200">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-teal-400/20 rounded-full blur-3xl"></div>
+                    <div class="relative w-96 h-96 glass-panel rounded-full border-2 border-white/10 flex items-center justify-center p-8">
+                        <div class="w-full h-full rounded-full border border-dashed border-teal-500/50 animate-[spin_60s_linear_infinite] absolute"></div>
+                        <div class="text-center">
+                            <i class="fas fa-heartbeat text-8xl text-transparent bg-clip-text bg-gradient-to-br from-teal-300 to-blue-500 mb-4"></i>
+                            <h3 class="text-2xl font-bold text-white">חדשנות בהדרכה</h3>
+                        </div>
+                        
+                        <!-- אייקונים מרחפים קטנים -->
+                        <div class="absolute top-10 right-10 w-12 h-12 glass-panel rounded-full flex items-center justify-center text-teal-400 shadow-lg" style="animation: float 4s ease-in-out infinite;">
+                            <i class="fas fa-book-medical"></i>
+                        </div>
+                        <div class="absolute bottom-16 left-4 w-14 h-14 glass-panel rounded-full flex items-center justify-center text-blue-400 shadow-lg" style="animation: float 5s ease-in-out infinite reverse;">
+                            <i class="fas fa-laptop-medical"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 relative z-10 bg-slate-800/30 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">הפרופיל <span class="text-gradient">האישי שלי</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-teal-400 mx-auto rounded-full mb-6"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+                <!-- תמונת פרופיל או אילוסטרציה -->
+                <div class="md:col-span-5 reveal">
+                    <div class="relative rounded-2xl overflow-hidden glass-panel p-2 aspect-[4/5] group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-teal-500/20 mix-blend-overlay"></div>
+                        <img src="תמונה פיתוח מקצועי.png" alt="תמונת פרופיל" class="w-full h-full object-cover rounded-xl filter grayscale group-hover:grayscale-0 transition-all duration-700">
+                        <!-- תג צף על התמונה -->
+                        <div class="absolute bottom-6 right-6 glass-panel px-4 py-2 rounded-lg backdrop-blur-md border border-white/20 shadow-xl">
+                            <span class="block text-sm text-gray-300">תפקיד נוכחי</span>
+                            <span class="block font-bold text-teal-400">רכזת פיתוח מקצועי</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- טקסט אודות ונתונים מקצועיים -->
+                <div class="md:col-span-7 reveal delay-200">
+                    <h3 class="text-2xl font-bold mb-4 text-white">שלום, שמי <span class="text-blue-400">[השם שלך]</span></h3>
+                    <p class="text-gray-300 text-lg leading-relaxed mb-6">
+                        כאחות מרכזת פיתוח מקצועי, השליחות שלי היא להפוך ידע תיאורטי לפרקטיקה קלינית מצוינת. אני מתמחה באיתור צרכי ההדרכה של הצוות, בניית תוכניות התערבות ולמידה מותאמות אישית, והטמעת סטנדרטים מקצועיים גבוהים במחלקה.
+                    </p>
+                    <p class="text-gray-300 text-lg leading-relaxed mb-8">
+                        אני מאמינה שסביבת עבודה המעודדת למידה מתמדת, סקרנות ומקצועיות, היא המפתח לשיפור מתמיד באיכות הטיפול שאנו מספקים למטופלינו. בגישתי, אני משלבת שיטות הדרכה מסורתיות יחד עם סימולציות מתקדמות וכלים דיגיטליים חדשניים.
+                    </p>
+
+                    <!-- סטטיסטיקות מקצועיות -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div class="glass-panel p-4 rounded-xl text-center">
+                            <i class="fas fa-award text-3xl text-blue-400 mb-2"></i>
+                            <div class="text-2xl font-bold text-white mb-1">+10</div>
+                            <div class="text-xs text-gray-400">שנות ניסיון בסיעוד</div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl text-center">
+                            <i class="fas fa-users-cog text-3xl text-teal-400 mb-2"></i>
+                            <div class="text-2xl font-bold text-white mb-1">+50</div>
+                            <div class="text-xs text-gray-400">תוכניות הכשרה שפותחו</div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl text-center hidden sm:block">
+                            <i class="fas fa-graduation-cap text-3xl text-purple-400 mb-2"></i>
+                            <div class="text-2xl font-bold text-white mb-1">MA</div>
+                            <div class="text-xs text-gray-400">תואר שני בסיעוד/מנהל</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="learning" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">תוצרי <span class="text-gradient">למידה והדרכה</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-teal-400 mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto">אוסף חומרי עזר, מצגות, לומדות ונוהלי עבודה שפותחו במטרה להנגיש מידע מקצועי לצוות הסיעודי בצורה ברורה ואפקטיבית.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- כרטיסייה 1 -->
+                <div class="glass-panel rounded-2xl p-8 hover:-translate-y-2 transition-transform reveal">
+                    <div class="w-14 h-14 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                        <i class="fas fa-laptop-medical"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">לומדות דיגיטליות אינטראקטיביות</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">פיתוח יחידות לימוד ממוחשבות המאפשרות לאחיות לרענן ידע בזמנן החופשי, כולל מבדקי הבנה מובנים ותרחישי מקרה קצרים.</p>
+                    <a href="#" class="text-blue-400 text-sm font-bold hover:text-blue-300 flex items-center gap-1 w-max">
+                        צפה בלומדה <i class="fas fa-chevron-left text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- כרטיסייה 2 -->
+                <div class="glass-panel rounded-2xl p-8 hover:-translate-y-2 transition-transform reveal delay-100">
+                    <div class="w-14 h-14 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">מדריכי כיס ופרוטוקולים קליניים</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">יצירת עזרי זיכרון (Cognitive Aids), תרשימי זרימה מדויקים לטיפול במצבי חירום, ותמצות נהלים ארוכים לכלים ישימים בשטח.</p>
+                    <a href="#" class="text-teal-400 text-sm font-bold hover:text-teal-300 flex items-center gap-1 w-max">
+                        צפה במדריך <i class="fas fa-chevron-left text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- כרטיסייה 3 -->
+                <div class="glass-panel rounded-2xl p-8 hover:-translate-y-2 transition-transform reveal delay-200">
+                    <div class="w-14 h-14 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">סרטוני הדרכה ומיומנויות</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">הפקה של סרטונים קצרים המדגימים ביצוע נכון של פרוצדורות סיעודיות, הפעלת מכשור רפואי חדש, ודגשים לבטיחות המטופל.</p>
+                    <a href="#" class="text-purple-400 text-sm font-bold hover:text-purple-300 flex items-center gap-1 w-max">
+                        צפה בסרטון <i class="fas fa-chevron-left text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="questionnaires" class="py-24 relative z-10 bg-slate-900/50 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">הערכה <span class="text-gradient">ובקרת ידע</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-teal-400 mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto">כלים מובנים להערכת הידע הקליני של הצוות, מיפוי פערים, ומדידת האפקטיביות של ההדרכות שהועברו.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- שאלון 1 -->
+                <div class="glass-panel rounded-2xl overflow-hidden reveal">
+                    <div class="p-6 border-b border-white/10 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-indigo-500/20 rounded-full flex items-center justify-center text-indigo-400">
+                            <i class="fas fa-tasks text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">מבדק ידע קליני</h3>
+                            <span class="text-xs text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">רענון שנתי</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">שאלון מקוון לבחינת הידע בנושא בטיחות הטיפול התרופתי, מניעת זיהומים וזיהוי הידרדרות קלינית במטופלים.</p>
+                        <button class="w-full py-3 bg-white/5 hover:bg-white/10 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 border border-white/10">
+                            לצפייה במבדק <i class="fas fa-arrow-left text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- שאלון 2 -->
+                <div class="glass-panel rounded-2xl overflow-hidden reveal delay-100 border-teal-500/30">
+                    <div class="p-6 border-b border-white/10 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-teal-500/20 rounded-full flex items-center justify-center text-teal-400">
+                            <i class="fas fa-poll text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">הערכת אפקטיביות הדרכה</h3>
+                            <span class="text-xs text-teal-400 border border-teal-500/30 px-2 py-0.5 rounded-full">משוב הדרכה</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">שאלון משוב קצר המועבר לאחר כל סדנה או יום עיון, לבחינת מידת ההבנה, שביעות הרצון מהמרצה והצעות לשיפור.</p>
+                        <!-- הקישור שביקשת מיושם כאן -->
+                        <a href="https://amishmert.vercel.app/" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-teal-500/20 flex items-center justify-center gap-2">
+                            למילוי הטופס (אמי"ש) <i class="fas fa-external-link-alt text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- שאלון 3 -->
+                <div class="glass-panel rounded-2xl overflow-hidden reveal delay-200">
+                    <div class="p-6 border-b border-white/10 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center text-orange-400">
+                            <i class="fas fa-search text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">סקר צרכי הדרכה</h3>
+                            <span class="text-xs text-orange-400 border border-orange-500/30 px-2 py-0.5 rounded-full">מיפוי צוותי</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">כלי למיפוי עצמי של הצוות, המאפשר לאתר חוסרי ידע ותחומי עניין, ומשמש בסיס לבניית תוכנית ההדרכה השנתית למחלקה.</p>
+                        <button class="w-full py-3 bg-white/5 hover:bg-white/10 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 border border-white/10">
+                            לצפייה בסקר <i class="fas fa-arrow-left text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="simulations" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">סימולציות <span class="text-gradient">ותרגילים קליניים</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-teal-400 mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto">תרחישים קליניים מציאותיים, תרגולי צוות ואימונים מעשיים לשיפור מיומנויות, תפקוד במצבי חירום וקבלת החלטות בזמן אמת.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- סימולציה 1 - חדר בריחה -->
+                <div class="glass-panel rounded-2xl overflow-hidden reveal group">
+                    <div class="h-48 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-red-500/20 mix-blend-multiply transition-opacity group-hover:opacity-60 z-10"></div>
+                        <img src="https://placehold.co/600x400/1e293b/ef4444?text=Escape+Room" alt="חדר בריחה" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute bottom-0 right-0 w-full p-4 bg-gradient-to-t from-slate-900 to-transparent z-20">
+                            <span class="text-xs font-medium px-3 py-1 bg-slate-900/80 text-red-400 rounded-full border border-red-500/30 backdrop-blur-sm shadow-lg">
+                                <i class="fas fa-door-open mr-1"></i> חשיבה קלינית
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6 relative z-30 bg-slate-800/80 backdrop-blur-md">
+                        <h3 class="text-xl font-bold mb-3">חדר בריחה קליני</h3>
+                        <p class="text-gray-400 text-sm mb-4 leading-relaxed">תרגיל חוויתי המדמה חדר בריחה. על הצוות לפתור חידות קליניות וליישם ידע מקצועי בלחץ זמן כדי "להציל" את המטופל.</p>
+                        <a href="https://targil-mocha.vercel.app/" target="_blank" rel="noopener noreferrer" class="w-full mt-2 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-300 hover:text-white rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 border border-red-500/30">
+                            לכניסה לחדר הבריחה <i class="fas fa-external-link-alt text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- סימולציה 2 - סולמות וחבלים -->
+                <div class="glass-panel rounded-2xl overflow-hidden reveal delay-100 group">
+                    <div class="h-48 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-blue-500/20 mix-blend-multiply transition-opacity group-hover:opacity-60 z-10"></div>
+                        <img src="https://placehold.co/600x400/1e293b/3b82f6?text=Snakes+%26+Ladders" alt="סולמות וחבלים" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute bottom-0 right-0 w-full p-4 bg-gradient-to-t from-slate-900 to-transparent z-20">
+                            <span class="text-xs font-medium px-3 py-1 bg-slate-900/80 text-blue-400 rounded-full border border-blue-500/30 backdrop-blur-sm shadow-lg">
+                                <i class="fas fa-dice mr-1"></i> משחוק ולמידה
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6 relative z-30 bg-slate-800/80 backdrop-blur-md">
+                        <h3 class="text-xl font-bold mb-3">סולמות וחבלים - רענון</h3>
+                        <p class="text-gray-400 text-sm mb-4 leading-relaxed">משחק אינטראקטיבי לצוות המבוסס על "סולמות וחבלים". משלב שאלות ידע, נהלי עבודה ובטיחות המטופל בצורה מהנה.</p>
+                        <a href="https://simulation1-theta.vercel.app/" target="_blank" rel="noopener noreferrer" class="w-full mt-2 py-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 hover:text-white rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 border border-blue-500/30">
+                            לכניסה למשחק <i class="fas fa-external-link-alt text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- סימולציה 3 -->
+                <div class="glass-panel rounded-2xl overflow-hidden reveal delay-200 group">
+                    <div class="h-48 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-purple-500/20 mix-blend-multiply transition-opacity group-hover:opacity-60 z-10"></div>
+                        <img src="https://placehold.co/600x400/1e293b/a855f7?text=Communication" alt="תקשורת טיפולית" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute bottom-0 right-0 w-full p-4 bg-gradient-to-t from-slate-900 to-transparent z-20">
+                            <span class="text-xs font-medium px-3 py-1 bg-slate-900/80 text-purple-400 rounded-full border border-purple-500/30 backdrop-blur-sm shadow-lg">
+                                <i class="fas fa-comments mr-1"></i> תקשורת בינאישית
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6 relative z-30 bg-slate-800/80 backdrop-blur-md">
+                        <h3 class="text-xl font-bold mb-3">התמודדות עם משברים</h3>
+                        <p class="text-gray-400 text-sm mb-4 leading-relaxed">תרגילי משחק תפקידים (Role-Play) בשילוב שחקנים המדמים מסירת בשורה מרה, התמודדות עם מטופל אגרסיבי, והכלת משפחות במצבי דחק.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-24 relative z-10 bg-slate-900/50 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">פיתוחים <span class="text-gradient">נוספים</span></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-teal-400 mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto">כלים ניהוליים ומקצועיים שפותחו לייעול עבודת הצוות, ניהול המידע ושיפור איכות הטיפול.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- פרויקט 1 -->
+                <div class="glass-panel rounded-2xl p-6 flex flex-col sm:flex-row gap-6 items-center sm:items-start reveal">
+                    <div class="w-20 h-20 shrink-0 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center border border-green-500/30 shadow-lg">
+                        <i class="fas fa-file-excel text-3xl text-green-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">דאשבורד מעקב הדרכות</h3>
+                        <p class="text-gray-400 text-sm mb-4 leading-relaxed">כלי ניהולי חכם למעקב אחר סטטוס ההדרכות וההסמכות של כלל אנשי הצוות במחלקה, הכולל התראות על פגי תוקף של הכשרות מנדטוריות.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-slate-800 border border-slate-600 px-2 py-1 rounded text-gray-300">ניהול מידע</span>
+                            <span class="text-xs bg-slate-800 border border-slate-600 px-2 py-1 rounded text-gray-300">בקרת איכות</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- פרויקט 2 -->
+                <div class="glass-panel rounded-2xl p-6 flex flex-col sm:flex-row gap-6 items-center sm:items-start reveal delay-100">
+                    <div class="w-20 h-20 shrink-0 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center border border-blue-500/30 shadow-lg">
+                        <i class="fas fa-mobile-alt text-3xl text-blue-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">פורטל צוות מקוון</h3>
+                        <p class="text-gray-400 text-sm mb-4 leading-relaxed">ריכוז כלל נהלי המחלקה, פרוטוקולים, טלפונים חשובים וחומרי הדרכה במרחב דיגיטלי אחד, נגיש וקל לשימוש מכל מכשיר.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-slate-800 border border-slate-600 px-2 py-1 rounded text-gray-300">דיגיטציה</span>
+                            <span class="text-xs bg-slate-800 border border-slate-600 px-2 py-1 rounded text-gray-300">נגישות מידע</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 relative z-10">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-3xl p-8 md:p-12 reveal shadow-2xl shadow-blue-900/20">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold mb-4">יצירת קשר <span class="text-blue-400">ישירה</span></h2>
+                    <p class="text-gray-400">נשמח לשוחח, לשתף פעולה או לענות על כל שאלה מקצועית.</p>
+                </div>
+
+                <form onsubmit="event.preventDefault(); showMessage();" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-sm text-gray-400 font-medium ml-1">שם מלא</label>
+                            <input type="text" id="name" required class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors placeholder-gray-600" placeholder="ישראל ישראלי">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm text-gray-400 font-medium ml-1">תפקיד / מחלקה</label>
+                            <input type="text" id="subject" class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors placeholder-gray-600" placeholder="למשל: אחות אחראית / פנימית א'">
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="text-sm text-gray-400 font-medium ml-1">אימייל לחזרה</label>
+                        <input type="email" id="email" required class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors placeholder-gray-600" placeholder="your@email.com">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm text-gray-400 font-medium ml-1">הודעה</label>
+                        <textarea id="message" required rows="4" class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors resize-none placeholder-gray-600" placeholder="כתוב את הודעתך כאן..."></textarea>
+                    </div>
+
+                    <!-- הודעת חיווי לווצאפ -->
+                    <div id="success-message" class="hidden bg-[#25D366]/20 border border-[#25D366]/50 text-[#25D366] px-4 py-3 rounded-xl text-center flex items-center justify-center gap-2 font-medium">
+                        <i class="fas fa-check-circle"></i> מעביר אותך לווצאפ...
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#128C7E] hover:to-[#075E54] text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-[#25D366]/20 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 text-lg">
+                        שלח הודעה בווצאפ <i class="fab fa-whatsapp text-2xl"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- פוטר -->
+    <footer class="border-t border-white/10 bg-slate-900/80 backdrop-blur-md py-8 text-center relative z-10">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3 text-xl font-bold">
+                <img src="https://placehold.co/100x100/1e293b/3b82f6?text=Logo+2" alt="לוגו" class="w-10 h-10 object-cover rounded-full border border-white/10">
+                אחות מרכזת פיתוח מקצועי
+            </div>
+            <p class="text-gray-500 text-sm">© כל הזכויות שמורות. קידום מצוינות קלינית באמצעות הדרכה.</p>
+            <div class="flex gap-4">
+                <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition-colors">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-teal-500 transition-colors">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // פונקציונליות תפריט מובייל
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        });
+
+        // סגירת תפריט בלחיצה על קישור במובייל
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuBtn.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            });
+        });
+
+        // אנימציות הופעה בגלילה (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // מפעיל את האנימציה פעם אחת בלבד
+                }
+            });
+        };
+
+        const revealOptions = {
+            threshold: 0.15, // מפעיל כש-15% מהאלמנט נראה
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
+        
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // פונקציית שליחה לווצאפ
+        function showMessage() {
+            const btn = document.getElementById('submit-btn');
+            const successMsg = document.getElementById('success-message');
+            const form = document.querySelector('form');
+            
+            // איסוף הנתונים
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value || 'ללא תפקיד';
+            const message = document.getElementById('message').value;
+            
+            // שינוי מצב כפתור
+            const originalBtnContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> מכין הודעה...';
+            btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+            setTimeout(() => {
+                // >>> חשוב: עדכני את המספר כאן <<<
+                const phoneNumber = "972500000000"; 
+                
+                const whatsappText = encodeURIComponent(`שלום, הגעתי מהאתר האישי שלך.\n\n*שם:* ${name}\n*תפקיד:* ${subject}\n*אימייל:* ${email}\n\n*הודעה:*\n${message}`);
+                
+                window.open(`https://wa.me/${phoneNumber}?text=${whatsappText}`, '_blank');
+                
+                successMsg.classList.remove('hidden');
+                btn.innerHTML = originalBtnContent;
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                form.reset();
+
+                setTimeout(() => {
+                    successMsg.classList.add('hidden');
+                }, 4000);
+            }, 800);
+        }
+    </script>
+</body>
+</html>
